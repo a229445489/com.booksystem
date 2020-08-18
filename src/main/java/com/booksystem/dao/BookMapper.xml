@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <!--一个mapper对应一个接口-->
+<mapper namespace="com.booksystem.dao.BookMapper">
+    <!--写该接口文件下的sql语句（共五个）-->
+    
+    <!--增加 名称addBook，参数Books-->
+    <insert id="addBook" parameterType="Books">
+        insert into ssmbuild.books(bookName,bookCounts,detail)
+        values (#{bookName}, #{bookCounts}, #{detail})
+    </insert>
+
+    <!--删除一本书 名称deleteBookById，参数int-->
+    <delete id="deleteBookById" parameterType="Integer">
+        delete from ssmbuild.books where bookID=#{bookID}
+    </delete>
+
+    <!--修改书籍 名称updateBook,参数Books-->
+    <update id="updateBook" parameterType="Books">
+        update ssmbuild.books
+        set bookName = #{bookName},bookCounts = #{bookCounts},detail = #{detail}
+        where bookID = #{bookID}
+    </update>
+
+    <!--根据id查询一本书 名称queryBookById，返回值Books-->
+    <select id="queryBookById" resultType="Books">
+        select * from ssmbuild.books
+        where bookID = #{bookID}
+    </select>
+
+    <!--查询全部书籍 名称queryAllBook，返回值Books，列表-->
+    <select id="queryAllBook" resultType="Books">
+        select * from ssmbuild.books
+    </select>
+
+    <!--用书名查询书籍-->
+    <select id="queryBookByName" resultType="Books">
+        select * from ssmbuild.books where true
+            <if test="bookName != null and bookName!= ''">
+               and bookName like concat(concat('%',#{bookName}),'%')
+            </if>
+    </select>
+    
+    <select id="selectNums" resultType="java.lang.Integer">
+        select count(*) from ssmbuild.books where bookName like concat(concat('%',#{bookName}),'%')
+    </select>
+
+</mapper>
